@@ -2,12 +2,16 @@ var express = require('express');
 var mongoose = require('mongoose');
 var bodyparser = require('body-parser');
 var app = express();
+var passport = require('passport');
+var authController = require('./controllers/auth');
 
 app.use(bodyparser.json());
+app.use(passport.initialize());
 
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/notes_development');
 
 require('./routes/notes_routes')(app);
+require('./routes/user_routes')(app);
 
 app.set('port', process.env.PORT || 3000);
 app.listen(app.get('port'), function() {
