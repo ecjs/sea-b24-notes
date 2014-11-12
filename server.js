@@ -8,9 +8,11 @@ var authController = require('./controllers/auth');
 app.use(bodyparser.json());
 app.use(passport.initialize());
 
+app.set('jwtSecret', process.env.JWT_SECRET || 'changethisordie');
+var jwtauth = require('./controllers/jwt_auth')(app.get('jwtSecret'));
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/notes_development');
 
-require('./routes/notes_routes')(app);
+require('./routes/notes_routes')(app, jwtauth);
 require('./routes/user_routes')(app);
 
 app.set('port', process.env.PORT || 3000);

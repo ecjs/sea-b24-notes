@@ -1,16 +1,13 @@
 var mongoose = require('mongoose');
-var uniqueValidator = require('mongoose-unique-validator');
 var bcrypt = require('bcrypt-nodejs');
+var jwt = require('jwt-simple');
 
 var UserSchema = mongoose.Schema({
   username: {
-    type: String,
-    unique: true,
-    required: true
+    type: String
   },
   password: {
-    type: String,
-    required: true
+    type: String
   }
 });
 
@@ -31,6 +28,14 @@ UserSchema.pre('save', function(callback) {
     });
   });
 });
+
+UserSchema.methods.generateToken = function(secret) {
+  var self = this;
+  var token  = jwt.encode({
+    iss: self._id
+  }, secret);
+  return token;
+};
 
 UserSchema.methods.verifyPassword = function(password, cb) {
   bcrypt.compare(password, this.password, function(err, isMatch) {

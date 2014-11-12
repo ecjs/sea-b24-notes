@@ -8,16 +8,12 @@ module.exports = function(app) {
       username: req.body.username,
       password: req.body.password
     });
-    user.save(function(err) {
-      if (err) res.send(err);
-
-      res.json({message: 'New note user added!'});
+    user.save(function(err, data) {
+      if (err) return res.send(err);
+      res.json({'jwt': user.generateToken(app.get('jwtSecret'))});
     });
   });
   app.get('/users', authController.isAuthenticated, function(req, res) {
-    User.find(function(err, users) {
-      if (err) res.send(err);
-      res.json(users);
-    });
+    res.json({'jwt': req.user.generateToken(app.get('jwtSecret'))});
   });
 };
