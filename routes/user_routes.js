@@ -1,4 +1,3 @@
-'use strict';
 var User = require('../models/user');
 var authController = require('../controllers/auth');
 
