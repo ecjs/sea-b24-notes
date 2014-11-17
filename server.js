@@ -6,7 +6,7 @@ var passport = require('passport');
 var authController = require('./controllers/auth');
 
 app.use(bodyparser.json());
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyparser.urlencoded({ extended: true}));
 app.use(passport.initialize());
 
 app.set('jwtSecret', process.env.JWT_SECRET || 'changethisordie');
